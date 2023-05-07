@@ -28,21 +28,21 @@
 ## 진행 상황
 
 - 기간: 2023/5/7(일) ~ 2023/7/16(일)
-- 스터디 멤버: [@yisu-kim](https://github.com/yisu-kim)
+- 스터디 멤버: [@yisu-kim](https://github.com/yisu-kim), [@youjin-10](https://github.com/youjin-10), [@Jooeun-K](https://github.com/Jooeun-K), [@YeonHwa-IM](https://github.com/YeonHwa-IM), [@jieunyy](https://github.com/jieunyy), [@jiindev](https://github.com/jiindev), [@Ajihey77](https://github.com/Ajihey77)
 
-| 회차 | 목차                                             |      날짜      | ✅  |
-| :--: | ------------------------------------------------ | :------------: | :-: |
-|  1   | [Installation](installation)                     | 2023/5/7 (일)  | ✅  |
-|  2   | [Quick Start](quick-start)                       | 2023/5/14 (일) |     |
-|  3   | [Describing the UI 1/2](describing-the-ui)       | 2023/5/21 (일) |     |
-|  4   | [Describing the UI 2/2](describing-the-ui)       | 2023/5/28 (일) |     |
-|  5   | [Adding Interactivity 1/2](adding-interactivity) | 2023/6/4 (일)  |     |
-|  6   | [Adding Interactivity 1/2](adding-interactivity) | 2023/6/11 (일) |     |
-|  7   | [Managing State 1/2](managing-state)             | 2023/6/18 (일) |     |
-|  8   | [Managing State 2/2](managing-state)             | 2023/6/25 (일) |     |
-|  9   | [Escape Hatches 1/3](escapte-hatches)            | 2023/7/2 (일)  |     |
-|  10  | [Escape Hatches 2/3](escapte-hatches)            | 2023/7/9 (일)  |     |
-|  11  | [Escape Hatches 3/3](escapte-hatches)            | 2023/7/16 (일) |     |
+| 회차 | 목차                                             |                   발표                   |                    기록                    | 날짜           | ✅  |
+| :--: | ------------------------------------------------ | :--------------------------------------: | :----------------------------------------: | -------------- | --- |
+|  1   | [Installation](installation)                     | [@yisu-kim](https://github.com/yisu-kim) | [@youjin-10](https://github.com/youjin-10) | 2023/5/7 (일)  | ✅  |
+|  2   | [Quick Start](quick-start)                       |                                          |                                            | 2023/5/14 (일) |     |
+|  3   | [Describing the UI 1/2](describing-the-ui)       |                                          |                                            | 2023/5/21 (일) |     |
+|  4   | [Describing the UI 2/2](describing-the-ui)       |                                          |                                            | 2023/5/28 (일) |     |
+|  5   | [Adding Interactivity 1/2](adding-interactivity) |                                          |                                            | 2023/6/4 (일)  |     |
+|  6   | [Adding Interactivity 1/2](adding-interactivity) |                                          |                                            | 2023/6/11 (일) |     |
+|  7   | [Managing State 1/2](managing-state)             |                                          |                                            | 2023/6/18 (일) |     |
+|  8   | [Managing State 2/2](managing-state)             |                                          |                                            | 2023/6/25 (일) |     |
+|  9   | [Escape Hatches 1/3](escapte-hatches)            |                                          |                                            | 2023/7/2 (일)  |     |
+|  10  | [Escape Hatches 2/3](escapte-hatches)            |                                          |                                            | 2023/7/9 (일)  |     |
+|  11  | [Escape Hatches 3/3](escapte-hatches)            | [@yisu-kim](https://github.com/yisu-kim) |                                            | 2023/7/16 (일) |     |
 
 ## 진행 방법
 
