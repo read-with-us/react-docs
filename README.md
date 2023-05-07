@@ -20,6 +20,8 @@
 > 모여서 함께 읽는 스터디는 스터디 시간에 주차별로 정해진 분량을 같이 읽고 중요하다고 생각한 부분에 대해 서로 토의하는 방식으로 진행되므로 사전에 준비할 필요가 없어 부담없이 참여할 수 있습니다.
 >
 > 문서를 읽는 것에 그치지 않고 한 번이라도 본인이 작성하는 코드에 새롭게 알게 된 지식을 적용해보고 경험을 공유하는 기회가 되었으면 합니다.
+>
+> 이 레포를 보고 유사한 스터디를 진행하고 싶은 분들을 위해 스터디 진행 시 소요 시간을 작성해두었으니 도움이 되시길 바랍니다.
 
 ## 참여 방법
 
@@ -30,9 +32,9 @@
 - 기간: 2023/5/7(일) ~ 2023/7/16(일)
 - 스터디 멤버: [@yisu-kim](https://github.com/yisu-kim), [@youjin-10](https://github.com/youjin-10), [@Jooeun-K](https://github.com/Jooeun-K), [@YeonHwa-IM](https://github.com/YeonHwa-IM), [@jieunyy](https://github.com/jieunyy), [@jiindev](https://github.com/jiindev), [@Ajihey77](https://github.com/Ajihey77)
 
-| 회차 | 목차                                             |                   발표                   |                    기록                    | 날짜           | ✅  |
-| :--: | ------------------------------------------------ | :--------------------------------------: | :----------------------------------------: | -------------- | --- |
-|  1   | [Installation](installation)                     | [@yisu-kim](https://github.com/yisu-kim) | [@youjin-10](https://github.com/youjin-10) | 2023/5/7 (일)  | ✅  |
+| 회차 | 목차                                             |                   발표                   |                    기록                    | 날짜           | ✅  | 소요 시간                                           |
+| :--: | ------------------------------------------------ | :--------------------------------------: | :----------------------------------------: | -------------- | --- | --------------------------------------------------- |
+|  1   | [Installation](installation)                     | [@yisu-kim](https://github.com/yisu-kim) | [@youjin-10](https://github.com/youjin-10) | 2023/5/7 (일)  | ✅  | (OT 진행)<br/>50분 독서<br/>10분 휴식<br/>40분 토의 |
 |  2   | [Quick Start](quick-start)                       |                                          |                                            | 2023/5/14 (일) |     |
 |  3   | [Describing the UI 1/2](describing-the-ui)       |                                          |                                            | 2023/5/21 (일) |     |
 |  4   | [Describing the UI 2/2](describing-the-ui)       |                                          |                                            | 2023/5/28 (일) |     |
