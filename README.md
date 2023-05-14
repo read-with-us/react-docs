@@ -30,7 +30,7 @@
 ## 진행 상황
 
 - 기간: 2023/5/7(일) ~ 2023/7/16(일)
-- 스터디 멤버: [@yisu-kim](https://github.com/yisu-kim), [@youjin-10](https://github.com/youjin-10), [@Jooeun-K](https://github.com/Jooeun-K), [@YeonHwa-IM](https://github.com/YeonHwa-IM), [@jieunyy](https://github.com/jieunyy), [@jiindev](https://github.com/jiindev), [@Ajihey77](https://github.com/Ajihey77)
+- 스터디 멤버: [@yisu-kim](https://github.com/yisu-kim), [@youjin-10](https://github.com/youjin-10), [@Jooeun-K](https://github.com/Jooeun-K), [@YeonHwa-IM](https://github.com/YeonHwa-IM), [@jieunyy](https://github.com/jieunyy), [@jiindev](https://github.com/jiindev), [@Ajihey77](https://github.com/Ajihey77), [@bjcho1](https://github.com/bjcho1)
 
 | 회차 | 목차                                             |                   발표                   |                    기록                    | 날짜           | ✅  | 소요 시간                                           |
 | :--: | ------------------------------------------------ | :--------------------------------------: | :----------------------------------------: | -------------- | --- | --------------------------------------------------- |
