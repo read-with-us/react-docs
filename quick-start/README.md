@@ -84,7 +84,8 @@
 ### 🤷‍♀️ 토의 
 - Q: (1번 관련) 어떤식으로 코드를 작성 하는가?
 - A: 대부분 코드 작성 후에 쪼개는편, 작게 만든후 조립하는 방식이 오히려 어렵게 느껴질때가 있음
-- A: > You can either build “top down” by starting with building the components higher up in the hierarchy (like FilterableProductTable) 
+- A: 
+     > You can either build “top down” by starting with building the components higher up in the hierarchy (like FilterableProductTable) 
      > or “bottom up” by working from components lower down (like ProductRow). In simpler examples, it’s usually easier to go top-down, 
      > and on larger projects, it’s easier to go bottom-up.
      > 이런 방법도 존재하고, 코드 작성을 해보니 하향식이 더쉽다고 느껴짐
