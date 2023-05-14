@@ -35,7 +35,7 @@
 | 회차 | 목차                                             |                   발표                   |                    기록                    | 날짜           | ✅  | 소요 시간                                           |
 | :--: | ------------------------------------------------ | :--------------------------------------: | :----------------------------------------: | -------------- | --- | --------------------------------------------------- |
 |  1   | [Installation](installation)                     | [@yisu-kim](https://github.com/yisu-kim) | [@youjin-10](https://github.com/youjin-10) | 2023/5/7 (일)  | ✅  | (OT 진행)<br/>50분 독서<br/>10분 휴식<br/>40분 토의 |
-|  2   | [Quick Start](quick-start)                       |                                          |                                            | 2023/5/14 (일) |     |
+|  2   | [Quick Start](quick-start)                       | [@yisu-kim](https://github.com/yisu-kim) |  [@Ajihey77](https://github.com/Ajihey77)  | 2023/5/14 (일) | ✅  | 60분 독서<br/>10분 휴식<br/>50분 토의               |
 |  3   | [Describing the UI 1/2](describing-the-ui)       |                                          |                                            | 2023/5/21 (일) |     |
 |  4   | [Describing the UI 2/2](describing-the-ui)       |                                          |                                            | 2023/5/28 (일) |     |
 |  5   | [Adding Interactivity 1/2](adding-interactivity) |                                          |                                            | 2023/6/4 (일)  |     |
@@ -44,7 +44,7 @@
 |  8   | [Managing State 2/2](managing-state)             |                                          |                                            | 2023/6/25 (일) |     |
 |  9   | [Escape Hatches 1/3](escapte-hatches)            |                                          |                                            | 2023/7/2 (일)  |     |
 |  10  | [Escape Hatches 2/3](escapte-hatches)            |                                          |                                            | 2023/7/9 (일)  |     |
-|  11  | [Escape Hatches 3/3](escapte-hatches)            | [@yisu-kim](https://github.com/yisu-kim) |                                            | 2023/7/16 (일) |     |
+|  11  | [Escape Hatches 3/3](escapte-hatches)            |                                          |                                            | 2023/7/16 (일) |     |
 
 ## 진행 방법
 
