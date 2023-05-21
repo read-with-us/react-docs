@@ -36,7 +36,7 @@
 | :--: | ------------------------------------------------ | :--------------------------------------: | :----------------------------------------: | -------------- | --- | --------------------------------------------------- |
 |  1   | [Installation](installation)                     | [@yisu-kim](https://github.com/yisu-kim) | [@youjin-10](https://github.com/youjin-10) | 2023/5/7 (일)  | ✅  | (OT 진행)<br/>50분 독서<br/>10분 휴식<br/>40분 토의 |
 |  2   | [Quick Start](quick-start)                       | [@yisu-kim](https://github.com/yisu-kim) |  [@Ajihey77](https://github.com/Ajihey77)  | 2023/5/14 (일) | ✅  | 60분 독서<br/>10분 휴식<br/>50분 토의               |
-|  3   | [Describing the UI 1/2](describing-the-ui)       |                                          |                                            | 2023/5/21 (일) |     |
+|  3   | [Describing the UI 1/2](describing-the-ui)       |  [@jiindev](https://github.com/jiindev)  |  [@Ajihey77](https://github.com/Ajihey77)  | 2023/5/21 (일) | ✅  | 45분 독서<br/>10분 휴식<br/>40분 토의               |
 |  4   | [Describing the UI 2/2](describing-the-ui)       |                                          |                                            | 2023/5/28 (일) |     |
 |  5   | [Adding Interactivity 1/2](adding-interactivity) |                                          |                                            | 2023/6/4 (일)  |     |
 |  6   | [Adding Interactivity 1/2](adding-interactivity) |                                          |                                            | 2023/6/11 (일) |     |
