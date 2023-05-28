@@ -32,19 +32,19 @@
 - 기간: 2023/5/7(일) ~ 2023/7/16(일)
 - 스터디 멤버: [@yisu-kim](https://github.com/yisu-kim), [@youjin-10](https://github.com/youjin-10), [@Jooeun-K](https://github.com/Jooeun-K), [@YeonHwa-IM](https://github.com/YeonHwa-IM), [@jieunyy](https://github.com/jieunyy), [@jiindev](https://github.com/jiindev), [@Ajihey77](https://github.com/Ajihey77), [@bjcho1](https://github.com/bjcho1)
 
-| 회차 | 목차                                             |                   발표                   |                    기록                    | 날짜           | ✅  | 소요 시간                                           |
-| :--: | ------------------------------------------------ | :--------------------------------------: | :----------------------------------------: | -------------- | --- | --------------------------------------------------- |
-|  1   | [Installation](installation)                     | [@yisu-kim](https://github.com/yisu-kim) | [@youjin-10](https://github.com/youjin-10) | 2023/5/7 (일)  | ✅  | (OT 진행)<br/>50분 독서<br/>10분 휴식<br/>40분 토의 |
-|  2   | [Quick Start](quick-start)                       | [@yisu-kim](https://github.com/yisu-kim) |  [@Ajihey77](https://github.com/Ajihey77)  | 2023/5/14 (일) | ✅  | 60분 독서<br/>10분 휴식<br/>50분 토의               |
-|  3   | [Describing the UI 1/2](describing-the-ui)       |  [@jiindev](https://github.com/jiindev)  |  [@Ajihey77](https://github.com/Ajihey77)  | 2023/5/21 (일) | ✅  | 45분 독서<br/>10분 휴식<br/>40분 토의               |
-|  4   | [Describing the UI 2/2](describing-the-ui)       |                                          |                                            | 2023/5/28 (일) |     |
-|  5   | [Adding Interactivity 1/2](adding-interactivity) |                                          |                                            | 2023/6/4 (일)  |     |
-|  6   | [Adding Interactivity 1/2](adding-interactivity) |                                          |                                            | 2023/6/11 (일) |     |
-|  7   | [Managing State 1/2](managing-state)             |                                          |                                            | 2023/6/18 (일) |     |
-|  8   | [Managing State 2/2](managing-state)             |                                          |                                            | 2023/6/25 (일) |     |
-|  9   | [Escape Hatches 1/3](escapte-hatches)            |                                          |                                            | 2023/7/2 (일)  |     |
-|  10  | [Escape Hatches 2/3](escapte-hatches)            |                                          |                                            | 2023/7/9 (일)  |     |
-|  11  | [Escape Hatches 3/3](escapte-hatches)            |                                          |                                            | 2023/7/16 (일) |     |
+| 회차 | 목차                                             |                    발표                    |                    기록                    | 날짜                               | ✅  | 소요 시간                                           |
+| :--: | ------------------------------------------------ | :----------------------------------------: | :----------------------------------------: | ---------------------------------- | --- | --------------------------------------------------- |
+|  1   | [Installation](installation)                     |  [@yisu-kim](https://github.com/yisu-kim)  | [@youjin-10](https://github.com/youjin-10) | 2023/5/7 (일)                      | ✅  | (OT 진행)<br/>50분 독서<br/>10분 휴식<br/>40분 토의 |
+|  2   | [Quick Start](quick-start)                       |  [@yisu-kim](https://github.com/yisu-kim)  |  [@Ajihey77](https://github.com/Ajihey77)  | 2023/5/14 (일)                     | ✅  | 60분 독서<br/>10분 휴식<br/>50분 토의               |
+|  3   | [Describing the UI 1/2](describing-the-ui)       |   [@jiindev](https://github.com/jiindev)   |  [@Ajihey77](https://github.com/Ajihey77)  | 2023/5/21 (일)                     | ✅  | 45분 독서<br/>10분 휴식<br/>40분 토의               |
+|  4   | [Describing the UI 2/2](describing-the-ui)       | [@youjin-10](https://github.com/youjin-10) |  [@Jooeun-K](https://github.com/Jooeun-K)  | 2023/5/28 (일)<br/>\*오프라인 모임 | ✅  | 50분 독서<br/>5분 휴식<br/>45분 토의                |
+|  5   | [Adding Interactivity 1/2](adding-interactivity) |                                            |                                            | 2023/6/4 (일)                      |     |
+|  6   | [Adding Interactivity 1/2](adding-interactivity) |                                            |                                            | 2023/6/11 (일)                     |     |
+|  7   | [Managing State 1/2](managing-state)             |                                            |                                            | 2023/6/18 (일)                     |     |
+|  8   | [Managing State 2/2](managing-state)             |                                            |                                            | 2023/6/25 (일)                     |     |
+|  9   | [Escape Hatches 1/3](escapte-hatches)            |                                            |                                            | 2023/7/2 (일)                      |     |
+|  10  | [Escape Hatches 2/3](escapte-hatches)            |                                            |                                            | 2023/7/9 (일)                      |     |
+|  11  | [Escape Hatches 3/3](escapte-hatches)            |                                            |                                            | 2023/7/16 (일)                     |     |
 
 ## 진행 방법
 
@@ -52,6 +52,7 @@
 
 - 스터디 리더는 스터디 시작 전 문서를 읽고 해당 챕터의 예상 시간을 측정합니다.
 - 스터디 시간에는 다함께 문서를 읽으며 각자 중요하다고 생각하는 부분이나 인상깊은 내용을 하이라이트합니다.
+- 이때, 하이라이트를 남기는 문서는 영어와 한국어로 읽는 사람 모두를 고려하여 번역이 병기된 비공식 한글 번역 문서를 기준으로 합니다.
 - 예상 시간 내에 못다 읽은 인원이 있으면 5~10분 단위로 시간을 연장합니다.
 - 독서 시간이 종료되면 10분간 휴식합니다.
 
