@@ -1,14 +1,19 @@
 # Describing the UI
 
-- [Describing the UI](#describing-the-ui-1)
-- [Your first component](#your-first-component)
-- [Importing and exporting components](#importing-and-exporting-components)
-- [Writing markup with JSX](#writing-markup-with-jsx)
-- [JavaScript in JSX with curly braces](#javascript-in-jsx-with-curly-braces)
-- [Passing Props to a Component](#passing-props-to-a-component)
-- [Conditional Rendering](#conditional-rendering)
-- [Rendering Lists](#rendering-lists)
-- [Keeping Components Pure](#keeping-components-pure)
+- [Describing the UI](#describing-the-ui)
+  - [Describing the UI](#describing-the-ui-1)
+  - [Your first component](#your-first-component)
+    - [🤷‍♀️ 질문](#️-질문)
+  - [Importing and exporting components](#importing-and-exporting-components)
+    - [🤷‍♀️ 질문](#️-질문-1)
+  - [Writing markup with JSX](#writing-markup-with-jsx)
+    - [🤷‍♀️ 질문](#️-질문-2)
+  - [JavaScript in JSX with curly braces](#javascript-in-jsx-with-curly-braces)
+  - [Passing Props to a Component](#passing-props-to-a-component)
+  - [Conditional Rendering](#conditional-rendering)
+  - [Rendering Lists](#rendering-lists)
+  - [Keeping Components Pure](#keeping-components-pure)
+    - [💡 정보](#-정보)
 
 <br />
 
@@ -151,8 +156,282 @@ export default function Gallery() {
 
 ## Passing Props to a Component
 
+1. > You can think of props like “knobs” that you can adjust. They serve the same role as arguments serve for functions—in fact, props are the only argument to your component! React component functions accept a single argument, a props object:
+
+   - props가 하는 역할을 잘 설명해주고 있다. 다이얼로 조정한다는 표현이 인상깊다.
+   - 개정된 React docs에는 비유적인 표현이 많이 사용되어 있다고 느낌. (이해하기 좋음)
+
+   <br />
+
+2. > Use spread syntax with restraint. If you’re using it in every other component, something is wrong. Often, it indicates that you should split your components and pass children as JSX.
+   >
+   > > spread 문법은 제한적으로 사용하세요. 다른 모든 컴포넌트에 이 구문을 사용한다면 문제가 있는 것입니다.
+
+   - 전개 구문(spread 문법)을 언제 사용하지 말아야하는지, 그리고 대신 어떻게 해야 하는지 대안까지 알려주는 점이 좋다.
+   - Q. 개발 작업은 결국 스프레드 문법의 사용 여부와 같은 의사 판단의 연속이라고 생각한다. 문서의 이 부분은 그 의사 판단의 기준을 어떻게 세우면 좋은지 가이드 라인을 잡아주는 역할. 하지만 결국 디테일한 판단은 개발자의 주관에 달려 있다. 다른 분들은 이러한 의사 판단을 무엇을 기준으로 하시는지 궁금하다.
+   - A1. 어떠한 것을 선택했을 때 코드를 읽기 편한지.
+   - A2. 스프레드 문법을 잘 사용하지 않는디. 예외적으로 사용하는 경우가 디자인 시스템을 사용할 때. 커스텀한 props 외, default로 지정되어있는 props 값을 넘길 때에는 spread로 사용.
+
+   <br />
+
+3. > ```
+   > function Avatar(props) {
+   >    let person = props.person;
+   >    let size = props.size;
+   >    // ...
+   > }
+   > ```
+
+   - Q. 저는 props 구조분해할당시 보통 다음과 같은 방식을 사용하는데, props 가져와서 쓰는 것도 여러가지 방식들이 있겠구나 싶다. 다른 분들은 어떻게 하는지?
+     ```ts
+     function Avatar(props) {
+       const { person, size } = props;
+     }
+     ```
+   - A1. 문서에 기재된 것 처럼 props를 받아올 때 소괄호 안에서 구조분해할당해서 끌어오는 방식을 선호함.
+     ```ts
+     function Avatar({ person, size }) {
+       // ...
+     }
+     ```
+   - A2. 어떠한 방식을 선택하느냐는 취향의 문제이지만, 작업자끼리 컨벤션으로 공통 방식을 합의하는 것이 중요하다고 생각. 코드의 일관성을 유지할 수 있도록.
+
+   <br />
+
+4. > `children` prop을 가지고 있는 컴포넌트는 부모 컴포넌트가 임의의 JSX로 “채울” 수 있는 “구멍”을 가진 것이라고 생각할 수 있습니다. 패널, 그리드 등의 시각적 래퍼에 종종 `children` prop를 사용합니다.
+
+   - typescript 사용 시 children을 props로 받는 컴포넌트는 PropsWithChildren 타입을 사용해주면 조금 더 명시적으로 타입 명세 가능 (react18 추가 타입)
+   - 참고 링크 : [https://trend21c.tistory.com/2280](https://trend21c.tistory.com/2280)
+
+   <br />
+
+5. > There’s nothing wrong with repetitive code—it can be more legible. But at times you may value conciseness.
+
+   - 반복에 가독성이라는 장점이 있다고는 미처 생각하지 못했다. 새로운 관점을 배웠다.
+   - 반복 코드와 중복 코드는 다르다는 생각을 했음.
+
+   <br />
+
+6. > However, props are immutable—a term from computer science meaning “unchangeable”. When a component needs to change its props (for example, in response to a user interaction or new data), it will have to “ask” its parent component to pass it different props—a new object! Its old props will then be cast aside, and eventually the JavaScript engine will reclaim the memory taken by them.
+   >
+   > > 그러나 props는 불변으로, 컴퓨터 과학에서 “변경할 수 없다”는 뜻의 용어입니다. 컴포넌트가 props를 변경해야 하는 경우(예: 사용자의 상호작용이나 새로운 데이터에 대한 응답으로), 부모 컴포넌트에 다른 props, 즉,새로운 객체를 전달하도록 “요청”해야 합니다! 그러면 이전의 props는 버려지고(참조를 끊는다), 결국 JavaScript 엔진은 기존 props가 차지했던 메모리를 회수(가비지 컬렉팅. GC)하게 됩니다.
+
+   - props가 어떤 식으로 변경되는지 궁금하긴 해도 찾아보진 않았는데 새로 알아간다.
+
+   <br />
+
 ## Conditional Rendering
+
+1. > This style works well for simple conditions, but use it in moderation. If your components get messy with too much nested conditional markup, consider extracting child components to clean things up. In React, markup is a part of your code, so you can use tools like variables and functions to tidy up complex expressions.
+
+   ```ts
+   function Item({ name, isPacked }) {
+     return (
+       <li className="item">{isPacked ? <del>{name + " ✔"}</del> : name}</li>
+     );
+   }
+   ```
+
+   - 예시로 나온 위 코드를 다음과 같이 정리하면 조금 더 읽기 수월하다고 생각함.
+
+   ```ts
+   function Item({ name, isPacked }) {
+     return (
+       <li className="item">{isPacked ? <PackedItem /> : <UnpackedItem />}</li>
+     );
+   }
+   ```
+
+   - [del이라는 html 태그](https://developer.mozilla.org/ko/docs/Web/HTML/Element/del)는 처음 봤음. html도 꾸준히 발전하고 새로운 요소가 추가되고 있구나..
+   - 중단선을 표현해야 하는 경우 통상적으로 `text-decoration: line-through`같은 css를 사용해왔음
+
+   <br />
+
+2. > In practice, returning null from a component isn’t common because it might surprise a developer trying to render it. More often, you would conditionally include or exclude the component in the parent component’s JSX.
+
+   - 컴포넌트는 항상 무언가를 반환할거라 생각하는데 null을 반환하게 되면 개발자가 컴포넌트 내부 구현을 보지 않는 이상 null을 반환한다는 걸 모를 수도 있다. 그래서 '놀라게 된다'는 것 같다. 그래서 이런 방식보다는 컴포넌트는 항상 무언가를 반환하되 부모 컴포넌트에서 렌더링 여부를 제어하도록 하는 방법을 추천.
+
+   <br />
+
+3. > If your components get messy with too much nested conditional markup, consider extracting child components to clean things up. In React, markup is a part of your code, so you can use tools like variables and functions to tidy up complex expressions.
+
+   - 전에 리팩토링 책을 읽으며 복잡한 표현식이나 로직을 변수나 함수로 추출하고 적합한 이름을 부여해 추상화하는 방식을 봤는데 이와 비슷한 것 같다.
+   - 상태명이나 변수명을 시멘틱하게 짓는 것이 중요. 이름 짓기 어렵다.. -> 요즘 chatGPT에게 이름 짓기를 많이 위임하고 있는데 편하고 좋다.
+
+   <br />
+
+4. > React considers false as a “hole” in the JSX tree, just like null or undefined, and doesn’t render anything in its place.
+
+   - 지난 시간에 삼항 연산자로 null을 반환하는 방식이 더 낫다는 의견을 들었다고 공유했는데, 다행히 React의 작동 원리상 논리 연산자를 사용하는 방식과 차이가 없는 것 같다.
+
+   <br />
+
+5. > Don’t put numbers on the left side of &&.
+
+   - 0으로 계산된 값이 false로 넘어가면서 코드가 꼬였던 경험이 있어서 공감되네요.. (+ 여러 명의 공감)
+   - 이런 경우를 미연에 방지하기 위해 반드시 해당 값이 의도대로 들어가는지 테스트해보는 편
+   - `??`, `||`, `&&`를 사용할 때, string을 number로 변경할 때 등 형변환 관련된 자바스크립트 이슈가 예상되는 경우 주의가 필요하다.
+     - string을 number로 변경할 때 `Number()`, `parseInt()`중 무엇을 사용하느냐에 따라 결과값이 달라지는 경우가 꽤 잦다.
+
+   <br />
 
 ## Rendering Lists
 
+1. > ```tsx
+   > import { people } from "./data.js";
+   > import { getImageUrl } from "./utils.js";
+   >
+   > export default function List() {
+   >   const chemists = people.filter(
+   >     (person) => person.profession === "chemist"
+   >   );
+   >   const listItems = chemists.map((person) => (
+   >     <li>
+   >       <img src={getImageUrl(person)} alt={person.name} />
+   >       <p>
+   >         <b>{person.name}:</b>
+   >         {" " + person.profession + " "}
+   >         known for {person.accomplishment}
+   >       </p>
+   >     </li>
+   >   ));
+   >   return <ul>{listItems}</ul>;
+   > }
+   > ```
+
+   - Q. 예시 코드와 같은 경우 저는 ListItems를 List 컴포넌트 외부에 별도 선언하여 추상화하는 방향을 개인적으로 선호한다. 다른 분들은 어떠신지 궁금.
+   - 👇 이런 느낌..
+
+     ```tsx
+     import { people } from "./data.js";
+     import { getImageUrl } from "./utils.js";
+
+     const listItems = (person) => (
+         <li>
+            <img src={getImageUrl(person)} alt={person.name} />
+            <p>
+               <b>{person.name}:</b>
+               {" " + person.profession + " "}
+               known for {person.accomplishment}
+            </p>
+         </li>;
+      )
+
+     export default function List() {
+       const chemists = people.filter(
+         (person) => person.profession === "chemist"
+       );
+
+       return <ul>{chemists.map((person) => <listItems person={person} />)}</ul>
+
+     }
+     ```
+
+   - A. 동의한다. 오히려 docs의 예시와 같은 형태를 처음 봐서 신기했음.
+
+   <br />
+
+2. > Keys tell React which array item each component corresponds to, so that it can match them up later. This becomes important if your array items can move (e.g. due to sorting), get inserted, or get deleted. A well-chosen key helps React infer what exactly has happened, and make the correct updates to the DOM tree.
+3. > Locally generated data: If your data is generated and persisted locally (e.g. notes in a note-taking app), use an incrementing counter, [crypto.randomUUID()](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID) or a package like [uuid](https://www.npmjs.com/package/uuid) when creating items.
+   >
+   > > 로컬에서 생성된 데이터: 데이터가 로컬에서 생성되고 유지되는 경우(예: 메모 작성 앱의 메모), 항목을 만들 때 증분 카운터, [crypto.randomUUID()](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID) 또는 [uuid](https://www.npmjs.com/package/uuid)와 같은 패키지를 사용하세요.
+
+   - 얼마 전에 데이터베이스가 아닌 프론트에서 행을 추가할 일이 있어 어떻게 고유 아이디를 부여할지 고민하다가 uuid 패키지를 사용하는 것으로 해결다. 워낙 데이터베이스에서 id를 주는데 익숙해져 있어서 어떻게 해야할지 바로 떠오르지 않았음.
+   - uuid 패키지 외에도 다양한 방법이 있다는 걸 알았다. 특히 `crypto.randomUUID()`는 처음 보는 웹 API라서 신기함!
+   - 패키지 없이 uuid를 생성할 수 있는 crypto.randomUUID()의 존재를 최근에 알게되었는데 (긍정적) 충격이었다..
+   - 이 때, map으로 렌더링한 list에서 즉석으로 생성하는 것이 아니라, 로컬에서 데이터에 고유한 id를 부여하는 작업이 선행되어야 한다는 것이 포인트라고 생각
+   - 대충 index값 넣을 때가 많았는데 반성하게 된다..
+
+   <br />
+
+4. > 잘 선택한 key는 배열 내 위치보다 더 많은 정보를 제공합니다. 만약 재정렬로 인해 어떤 항목의 위치가 변경되더라도, 해당 항목이 사라지지 않는 한, React는 key를 통해 그 항목을 식별할 수 있습니다.
+
+   - 최근에 key에 대한 질문을 받았을 때 제대로 대답하지 못했음. 두루뭉술하게만 알고 있었는데 확실히 알아간다.
+
+   <br />
+
+5. > 배열에서 항목의 인덱스를 key로 사용하고 싶을 수도 있습니다.
+
+   - 상단 내용 보고 반성하고 있는데 마침 이런 글이...
+
+   <br />
+
+6. > Similarly, do not generate keys on the fly, e.g. with key={Math.random()}. This will cause keys to never match up between renders, leading to all your components and DOM being recreated every time. Not only is this slow, but it will also lose any user input inside the list items. Instead, use a stable ID based on the data.
+   >
+   > > 마찬가지로 key={Math.random()}과 같이 즉석에서 key를 생성하지 마세요. 이렇게 하면 렌더링될 때마다 key가 일치하지 않아 매번 모든 컴포넌트와 DOM이 다시 생성됩니다. 속도가 느려질 뿐만 아니라 목록 항목 내부의 사용자 입력도 손실됩니다. 대신 데이터에 기반한 안정적인 ID를 사용하세요.
+
+   - 바로 이전 문단에서 왜 렌더링 중에 키를 생성하면 안된다고 이야기하는지 궁금했는데 조금 텀을 두고 설명해주니까 잠시 혼자 생각해볼 수 있었다. 문서를 구성할 때 고민을 많이 한 것 같다.
+
+   <br />
+
 ## Keeping Components Pure
+
+1. > Detecting impure calculations with StrictMode
+   >
+   > ```tsx
+   > import * as React from "react";
+   > import * as ReactDOM from "react-dom/client";
+   > import { StyledEngineProvider } from "@mui/material/styles";
+   > import Demo from "./demo";
+   >
+   > ReactDOM.createRoot(document.querySelector("#root")).render(
+   >   <React.StrictMode>.....</React.StrictMode>
+   > );
+   > ```
+
+   - index 파일에 strictMode로 감싸져있으면 컴포넌트가 두 번 렌더링 된다는 건 알았는데 왜 그러는지는 몰랐음. 이번에 알았네요.
+   - StrictMode에서 두 번 호출한다는 건 알고 있었는데 그게 컴포넌트의 순수성을 테스트한다는 건 몰랐다. 그리고 순수성을 테스트하기 위해 어려운 검증을 거치는 게 아니라 단순히 두 번 호출해본다는 점이 재미있음.
+
+   <br />
+
+2. > It minds its own business. It does not change any objects or variables that existed before it was called.
+   > Same inputs, same output. Given the same inputs, a pure function should always return the same result.
+   >
+   > > 자신의 일에만 신경씁니다. 호출되기 전에 존재했던 객체나 변수를 변경하지 않습니다.
+   > > 동일 입력, 동일 출력. 동일한 입력이 주어지면 항상 동일한 결과를 반환해야 합니다.
+
+   - 순수 함수의 특징
+
+   <br />
+
+3. > 컴포넌트를 레시피라고 생각할 수 있습니다. 레시피를 따르고 요리 과정에서 새로운 재료를 넣지 않으면 매번 같은 요리를 얻을 수 있습니다.
+
+   - 리액트 개념에 함수형 프로그래밍이 자주 언급되어서 흥미로움! 이 문장도 함수형 프로그래밍 잠깐 찍먹할 때 봤던 문장인데 그대로 들어가있어서 재밌다.
+
+   <br />
+
+4. > 함수형 프로그래밍은 순수성에 크게 의존하지만, 언젠가는, 어딘가에서, 무언가가 바뀌어야 합니다. 그것이 프로그래밍의 요점입니다!
+
+   - [한탄] 프론트엔드에서는 특히 이 순수성을 보장하기가 어렵지 않나요..ㅠㅠ
+   - 공감..
+
+   <br />
+
+5. > However, it’s fine because you’ve created them during the same render, inside `TeaGathering`. No code outside of `TeaGathering` will ever know that this happened. This is called “local mutation”—it’s like your component’s little secret.
+   >
+   > > 하지만 `TeaGathering` 내부에서 동일한 렌더링 중에 생성했기 때문에 괜찮습니다. `TeaGathering` 외부의 어떤 코드도 이런 일이 일어났다는 것을 알 수 없습니다. 이를 “지역 변이”라고 하며, 컴포넌트의 작은 비밀과 같습니다.
+
+   - 지역 변이라는 개념 자체는 처음 봤는데 지금까지 무의식적으로 사용한 것 같다. 배열이 담긴 상태가 있을 때 그 배열을 필터링한 값을 변수에 담아서 렌더링한다던가.
+
+   <br />
+
+6. > In React, side effects usually belong inside event handlers. Event handlers are functions that React runs when you perform some action—for example, when you click a button. Even though event handlers are defined inside your component, they don’t run during rendering! So event handlers don’t need to be pure.
+   >
+   > > React에서 사이드 이펙트는 보통 이벤트 핸들러에 속합니다. 이벤트 핸들러는 사용자가 어떤 동작을 수행할 때(예를 들어, 버튼을 클릭할 때) React가 실행하는 함수입니다. 이벤트 핸들러가 컴포넌트 내부에 정의되어 있긴 하지만 렌더링 중에는 실행되지 않습니다! 따라서 이벤트 핸들러는 순수할 필요가 없습니다.
+
+   - 좀 어려워서 곱씹는 중인데 렌더링 중에 실행되는 것이 아니면 순수할 필요가 없다는 점을 계속 생각하게 된다.
+
+   <br />
+
+7. > If you’ve exhausted all other options and can’t find the right event handler for your side effect, you can still attach it to your returned JSX with a useEffect call in your component. This tells React to execute it later, after rendering, when side effects are allowed. However, this approach should be your last resort.
+
+   - useEffect가 하는 일을 잘 풀어서 설명해주었다. 항상 그냥 사이드 이펙트를 처리하는 훅이라고만 생각했음.
+   - 리액트 clean code의 포인트 중 하나가 useEffect 남용으로 인한 사이드 이펙트를 얼마나 최소화하느냐라고 생각한다.
+
+   <br />
+
+### 💡 정보
+
+- 한국에서 커뮤니티 활동을 활발히 하는 FE 시니어 개발자 중 테오라는 분이 함수형 코딩에 대한 블로그 글을 종종 작성해주심. 프론트엔드 영역에 적용할 수 있는 함수형 프로그래밍에 대한 관심이 있다면 테오님 블로그 참고 추천합니다.
+- [https://velog.io/@teo](https://velog.io/@teo)
+- [함수형 프로그래밍을 배워보자!](https://velog.io/@teo/functional-programming-study)
