@@ -7,6 +7,10 @@
 - [Render and Commit](#render-and-commit)
   - [🤷‍♀️ 질문](#️-질문-1)
   - [💡 정보](#-정보)
+- [State as a Snapshot](#state-as-a-snapshot)
+- [Queueing a Series of State Updates](#queueing-a-series-of-state-updates)
+- [Updating Objects in State](#updating-objects-in-state)
+- [Updating Arrays in State](#updating-arrays-in-state)
 
 > **Note**
 >
@@ -15,6 +19,10 @@
 > - 사용자의 이벤트에 응답하는 방법
 > - 컴포넌트가 정보를 기억하게 하는 방법
 > - UI를 화면에 표시하는 두 가지 단계
+> - 스냅샷처럼 동작하는 상태
+> - 상태 업데이트를 큐에 추가하는 방법
+> - 객체 상태를 업데이트하는 방법
+> - 배열 상태를 업데이트하는 방법
 
 ## Adding Interactivity
 
@@ -127,3 +135,11 @@
 
 - https://tech.inflab.com/202207-rallit-form-refactoring/react-hook-form/#2-2-2-배열-관리---usefieldarray
 - https://youtu.be/4MrbfGSFY2A (7분 50초 쯤)
+
+## State as a Snapshot
+
+## Queueing a Series of State Updates
+
+## Updating Objects in State
+
+## Updating Arrays in State
