@@ -39,7 +39,7 @@
 |  3   | [Describing the UI 1/2](describing-the-ui)       |   [@jiindev](https://github.com/jiindev)   |  [@Ajihey77](https://github.com/Ajihey77)  | 2023/5/21 (일)                     | ✅  | 45분 독서<br/>10분 휴식<br/>40분 토의               |
 |  4   | [Describing the UI 2/2](describing-the-ui)       | [@youjin-10](https://github.com/youjin-10) |  [@Jooeun-K](https://github.com/Jooeun-K)  | 2023/5/28 (일)<br/>\*오프라인 모임 | ✅  | 50분 독서<br/>5분 휴식<br/>45분 토의                |
 |  5   | [Adding Interactivity 1/2](adding-interactivity) |  [@Jooeun-K](https://github.com/Jooeun-K)  |   [@jiindev](https://github.com/jiindev)   | 2023/6/4 (일)                      | ✅  | 60분 독서<br/>10분 휴식<br/>80분 토의               |
-|  6   | [Adding Interactivity 2/2](adding-interactivity) |                                            |                                            | 2023/6/11 (일)                     |     |
+|  6   | [Adding Interactivity 2/2](adding-interactivity) | [@youjin-10](https://github.com/youjin-10) |  [@yisu-kim](https://github.com/yisu-kim)  | 2023/6/11 (일)                     | ✅  | 60분 독서<br/>10분 휴식<br/>60분 토의               |
 |  7   | [Managing State 1/2](managing-state)             |                                            |                                            | 2023/6/18 (일)                     |     |
 |  8   | [Managing State 2/2](managing-state)             |                                            |                                            | 2023/6/25 (일)                     |     |
 |  9   | [Escape Hatches 1/3](escapte-hatches)            |                                            |                                            | 2023/7/2 (일)                      |     |
