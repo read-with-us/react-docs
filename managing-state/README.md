@@ -26,31 +26,30 @@
 2. > 각 action에 대한 state 업데이트 방법은 파일 맨 마지막 부분의 reducer 함수에 명시되어 있습니다.
    - useReducer를 제대로 사용해본 적이 없는 것 같아요..! 리덕스랑 사용 방식이 비슷하군요..!!
 3. 
-```
-import Heading from './Heading.js';
-import Section from './Section.js';
+```jsx
+import { useContext } from 'react';
+import { LevelContext } from './LevelContext.js';
 
-export default function Page() {
-  return (
-    <Section>
-      <Heading>Title</Heading>
-      <Section>
-        <Heading>Heading</Heading>
-        <Heading>Heading</Heading>
-        <Heading>Heading</Heading>
-        <Section>
-          <Heading>Sub-heading</Heading>
-          <Heading>Sub-heading</Heading>
-          <Heading>Sub-heading</Heading>
-          <Section>
-            <Heading>Sub-sub-heading</Heading>
-            <Heading>Sub-sub-heading</Heading>
-            <Heading>Sub-sub-heading</Heading>
-          </Section>
-        </Section>
-      </Section>
-    </Section>
-  );
+export default function Heading({ children }) {
+  const level = useContext(LevelContext);
+  switch (level) {
+    case 0:
+      throw Error('Heading must be inside a Section!');
+    case 1:
+      return <h1>{children}</h1>;
+    case 2:
+      return <h2>{children}</h2>;
+    case 3:
+      return <h3>{children}</h3>;
+    case 4:
+      return <h4>{children}</h4>;
+    case 5:
+      return <h5>{children}</h5>;
+    case 6:
+      return <h6>{children}</h6>;
+    default:
+      throw Error('Unknown level: ' + level);
+  }
 }
 ```
   - 컴포넌트 본문이 switch/case로 처리된 방식을 처음 봤어요. 신선하네요!
@@ -80,8 +79,8 @@ export default function Page() {
 ## Choosing the State Structure
 1. > 부모 구성 요소가 다른 값을 전달하는 경우messageColor나중에(예:'red'대신에'blue'),color 상태 변수업데이트되지 않습니다!상태는 첫 번째 렌더링 중에만 초기화됩니다.
    - 이렇게 prop을 바로 state에 넣어서 사용해 본 적은 없는것 같아요..(그냥 우연의 일치인듯) 그래서 이 설명대로 진짜 업데이트가 안되나 하고 해보니까 정말 안되네요!
-```
-     import * as React from 'react';
+```jsx
+import * as React from 'react';
 import './style.css';
 
 export default function App() {
