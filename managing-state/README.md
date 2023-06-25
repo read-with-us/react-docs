@@ -227,6 +227,7 @@ function Message({ messageColor }) {
    - 근데 이러면 원하지 않는 컴포넌트도 죄다 업데이트 된다던지하는 부작용도 있지 않을까 싶어요..
    - 맞아요. Consumer로서 상태를 사용하지 않은 컴포넌트도 다 리렌더링된다는 것 같네요. 다른 상태 라이브러리 중에 이런 문제를 보완한 게 있다고 들은 적이 있는데 기억이 안나서 😅좀 더 찾아볼게요!
    - ([recoil](https://recoiljs.org/ko/docs/introduction/motivation/) <- 요 링크 보시면 하단에 `상태를 사용하는 컴포넌트를 수정하지 않고도 상태를 파생된 데이터로 대체할 수 있다.` 라는 부분이 나와있어서 recoil 인가 싶은데 혹시 다른 상태 관리 라이브러리 아는 분 계시면 알려주세여~ 🙇)
+8. > [트위터](https://twitter.com/oliverloops/status/1672048391314976771?s=12&t=fIUAOjUF3fd_8NToV5L_tQ)에서 이런걸 봤어요.. 이런 경우에 리듀서를 활용할 수 있지않을까 싶네요😈
 
 ## Scaling Up with Reducer and Context
 
