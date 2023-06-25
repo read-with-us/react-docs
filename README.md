@@ -41,7 +41,7 @@
 |  5   | [Adding Interactivity 1/2](adding-interactivity) |  [@Jooeun-K](https://github.com/Jooeun-K)  |   [@jiindev](https://github.com/jiindev)   | 2023/6/4 (일)                      | ✅  | 60분 독서<br/>10분 휴식<br/>80분 토의               |
 |  6   | [Adding Interactivity 2/2](adding-interactivity) | [@youjin-10](https://github.com/youjin-10) |  [@yisu-kim](https://github.com/yisu-kim)  | 2023/6/11 (일)                     | ✅  | 60분 독서<br/>10분 휴식<br/>60분 토의               |
 |  7   | [Managing State 1/2](managing-state)             |  [@yisu-kim](https://github.com/yisu-kim)  |  [@Ajihey77](https://github.com/Ajihey77)  | 2023/6/18 (일)                     | ✅  | 55분 독서<br/>10분 휴식<br/>60분 토의               |
-|  8   | [Managing State 2/2](managing-state)             |                                            |                                            | 2023/6/25 (일)                     |     |
+|  8   | [Managing State 2/2](managing-state)             |  [@yisu-kim](https://github.com/yisu-kim)  | [@youjin-10](https://github.com/youjin-10) | 2023/6/25 (일)                     | ✅  | 70분 독서<br/>10분 휴식<br/>50분 토의               |
 |  9   | [Escape Hatches 1/3](escapte-hatches)            |                                            |                                            | 2023/7/2 (일)                      |     |
 |  10  | [Escape Hatches 2/3](escapte-hatches)            |                                            |                                            | 2023/7/9 (일)                      |     |
 |  11  | [Escape Hatches 3/3](escapte-hatches)            |                                            |                                            | 2023/7/16 (일)                     |     |
