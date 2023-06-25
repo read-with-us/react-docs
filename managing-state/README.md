@@ -3,7 +3,7 @@
 - [Managing State](#managing-state-1)
   - [🤷‍♀️ 질문](#️-질문)
 - [Reacting to Input with State](#reacting-to-input-with-state)
-  - [🤷‍♀️ 질문](#️-질문)
+  - [🤷‍♀️ 질문](#️-질문-1)
 - [Choosing the State Structure](#choosing-the-state-structure)
 - [Sharing State Between Components](#sharing-state-between-components)
 - [Preserving and Resetting State](#preserving-and-resetting-state)
@@ -32,14 +32,14 @@
 3.
 
 ```jsx
-import { useContext } from "react";
-import { LevelContext } from "./LevelContext.js";
+import { useContext } from 'react';
+import { LevelContext } from './LevelContext.js';
 
 export default function Heading({ children }) {
   const level = useContext(LevelContext);
   switch (level) {
     case 0:
-      throw Error("Heading must be inside a Section!");
+      throw Error('Heading must be inside a Section!');
     case 1:
       return <h1>{children}</h1>;
     case 2:
@@ -53,7 +53,7 @@ export default function Heading({ children }) {
     case 6:
       return <h6>{children}</h6>;
     default:
-      throw Error("Unknown level: " + level);
+      throw Error('Unknown level: ' + level);
   }
 }
 ```
@@ -94,17 +94,17 @@ export default function Heading({ children }) {
    - 이렇게 prop을 바로 state에 넣어서 사용해 본 적은 없는것 같아요..(그냥 우연의 일치인듯) 그래서 이 설명대로 진짜 업데이트가 안되나 하고 해보니까 정말 안되네요!
 
 ```jsx
-import * as React from "react";
-import "./style.css";
+import * as React from 'react';
+import './style.css';
 
 export default function App() {
-  const [color, setColor] = React.useState("red");
+  const [color, setColor] = React.useState('red');
 
   return (
     <div>
       <button
         onClick={() => {
-          setColor("blue");
+          setColor('blue');
         }}
       >
         change color
@@ -153,6 +153,7 @@ function Message({ messageColor }) {
    - [질문] UI 트리는 가상 돔을 뜻하는 걸까요? 공식 문서에 virtual DOM 검색 결과가 없긴 합니다.
    - A: 그 다음에 오는 문장을 보면 ui 트리와 브라우저 dom이 일치하도록 브라우저 dom을 업데이트한다는걸 보니까 그런것 같기도 해요.. 좀 더 검색해볼게요😅
    - (혹시 아시는 분 계시면 알려주시옵소서...🙇)
+   - [Dan Abramov가 트위터에 남긴 말](https://twitter.com/dan_abramov/status/1066328666341294080?lang=en)에 따르면 가상 돔이라는 용어가 혼란을 주기 때문에 더이상 사용하고 싶지 않다고 밝힌 적이 있네요. DOM 이슈가 핵심이 아니라 UI를 value로 간주하는 것이 더 핵심적이라는 것 같습니다. 그래서 아예 UI 트리라는 용어로 대체해버렸나봐요.
 3. > You might expect the state to reset when you tick checkbox, but it doesn’t! This is because both of these `<Counter />` tags are rendered at the same position. React doesn’t know where you place the conditions in your function. All it “sees” is the tree you return.
    - 완전 의외의 결과였어요! React가 구분하는 건 컴포넌트가 아니라 위치라는 걸 잘 기억해둬야 겠네요.
    - 위치 기준이라는 건 참 생소하네요..!
@@ -204,12 +205,12 @@ function Message({ messageColor }) {
 
      ```javascript
      // 값을 공유하려는 컴포넌트 내에서 아래처럼 값을 설정합니다
-     import { provide } from "vue";
-     provide(/* key */ "message", /* value */ "hello!");
+     import { provide } from 'vue';
+     provide(/* key */ 'message', /* value */ 'hello!');
 
      // 공유된 값을 사용해야 하는 컴포넌트 내에서 아래처럼 사용합니다.
-     import { inject } from "vue";
-     const message = inject("message");
+     import { inject } from 'vue';
+     const message = inject('message');
      ```
 
 3. > Since context lets you read information from a component above, each Section could read the level from the Section above, and pass level + 1 down automatically. Here is how you could do it:
