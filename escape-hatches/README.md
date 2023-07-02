@@ -77,7 +77,70 @@
 ## Manipulating the DOM with Refs
 
 1.  > This is called a ref callback. React will call your ref callback with the DOM node when it’s time to set the ref, and with null when it’s time to clear it.
-    - ref 콜백에 대해 알게 된 지 얼마 안 됐는데 DOM 엘리먼트가 마운트되고 너비를 재야하는 경우 유용할 것 같더라구요.
+
+    - ref 콜백에 대해 알게 된 지 얼마 안 됐는데 DOM 엘리먼트가 마운트되기 전에 너비를 재야하는 경우 유용할 것 같더라구요.
+    - (추가) 정확히 기억나지 않지만 약간 차이를 볼 수 있는 예시를 만들어보았습니다.
+
+      ```jsx
+      import { useEffect, useRef, useState } from 'react';
+
+      export default function Form() {
+        const inputRef = useRef(null);
+        const [inputWidth, setInputWidth] = useState(0);
+
+        useEffect(() => {
+          if (!inputRef.current) {
+            return;
+          }
+
+          console.log('App inputWidth', inputWidth);
+        }, [inputWidth]);
+
+        return (
+          <>
+            <input ref={(el) => el && setInputWidth(el.clientWidth)} />
+            <span> width: {inputWidth}</span>
+          </>
+        );
+      }
+      ```
+
+      - 콘솔에 로그가 찍히지 않습니다.
+      - width: 옆의 숫자가 0에서 173으로 깜빡이지 않습니다.
+
+      ```jsx
+      import { useEffect, useRef, useState } from 'react';
+
+      export default function Form() {
+        const inputRef = useRef(null);
+        const [inputWidth, setInputWidth] = useState(0);
+
+        useEffect(() => {
+          setInputWidth(inputRef.current.clientWidth);
+        }, []);
+
+        useEffect(() => {
+          if (!inputRef.current) {
+            return;
+          }
+
+          console.log('App2 inputWidth', inputWidth);
+        }, [inputWidth]);
+
+        return (
+          <>
+            <input ref={inputRef} />
+            <span> width: {inputWidth}</span>
+          </>
+        );
+      }
+      ```
+
+      - 콘솔에 로그가 찍힙니다.
+        - App2 inputWidth 0 (x2)
+        - App2 inputWidth 173
+      - width: 옆의 숫자가 0에서 173으로 깜빡입니다.
+
 2.  > 또 다른 해결책은 ref 어트리뷰트에 함수를 전달하는 것입니다. 이것을 “ref 콜백”이라고 합니다. React는 ref를 설정할 때 DOM 노드와 함께 ref 콜백을 호출하며, ref를 지울 때에는 null을 전달합니다. 이를 통해 자체 배열이나 Map을 유지하고, 인덱스나 특정 ID를 사용하여 어떤 ref에든 접근할 수 있습니다.
     - 이 부분의 작동 원리가 잘 이해가 안되네요. 여러번 읽어봐야 할 것 같습니다.
 3.  > const MyInput = forwardRef((props, ref) => {
