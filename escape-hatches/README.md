@@ -1,5 +1,12 @@
 # Escape Hatches
 
+- [Referencing Values with Refs](#referencing-values-with-refs)
+- [Manipulating the DOM with Refs](#manipulating-the-dom-with-refs)
+- [Synchronizing with Effects](#synchronizing-with-effects)
+- [You Might Not Need an Effect](#you-might-not-need-an-effect)
+- [Lifecycle of Reactive Effects](#lifecycle-of-reactive-effects)
+- [Separating Events from Effects](#separating-events-from-effects)
+
 > **Note**
 >
 > 'Escape Hatches' 챕터는 다음과 같은 내용을 다룹니다.
@@ -82,7 +89,7 @@
     - (추가) 정확히 기억나지 않지만 약간 차이를 볼 수 있는 예시를 만들어보았습니다.
 
       ```jsx
-      import { useEffect, useRef, useState } from 'react';
+      import { useEffect, useRef, useState } from "react";
 
       export default function Form() {
         const inputRef = useRef(null);
@@ -93,7 +100,7 @@
             return;
           }
 
-          console.log('App inputWidth', inputWidth);
+          console.log("App inputWidth", inputWidth);
         }, [inputWidth]);
 
         return (
@@ -109,7 +116,7 @@
       - width: 옆의 숫자가 0에서 173으로 깜빡이지 않습니다.
 
       ```jsx
-      import { useEffect, useRef, useState } from 'react';
+      import { useEffect, useRef, useState } from "react";
 
       export default function Form() {
         const inputRef = useRef(null);
@@ -124,7 +131,7 @@
             return;
           }
 
-          console.log('App2 inputWidth', inputWidth);
+          console.log("App2 inputWidth", inputWidth);
         }, [inputWidth]);
 
         return (
@@ -257,3 +264,165 @@
     - Next.js의 SSR과 같은 방법은 사용할 수 있는 환경에 한계가 있다 보니, 요즘에는 클라이언트 캐시 구축이 보편적으로 많이 사용되는 것 같아요. React Query, SWR, Apollo/client 등등..
 17. This helps you find Effects that need cleanup and exposes bugs like race conditions early.
     - 최근에 이 두 번의 effect 호출로 인하여 데이터 처리 로직에 문제가 생긴 경우가 있었는데, 개발 환경에서도 useEffect를 한번만 실행하는 hook을 만들어 처리했거든요. 그리 좋은 방법이 아니었던 것 같아 반성하게 되네요.
+
+## You Might Not Need an Effect
+
+1. > You don’t need Effects to transform data for rendering.
+   - Effect가 불필요한 첫 번째 경우
+2. > You don’t need Effects to handle user events.
+   - Effect가 불필요한 두 번째 경우
+3. > When something can be calculated from the existing props or state, don’t put it in state. Instead, calculate it during rendering.
+   - 예전에 이렇게 할 수 있다는 걸 모르고 무조건 state나 ref만 사용해야 하는 줄 알았다가 알게 됐을 때 좀 충격 받았어요 ㅋㅋ
+4. > 계산이 비싼지는 어떻게 알 수 있나요?
+   - 비싸다는 기준은 무엇인지 궁금했는데 속시원하게 알려주니 좋네요
+   - 친절한 deep dive..
+5. > If the overall logged time adds up to a significant amount (say, 1ms or more), it might make sense to memoize that calculation.
+   - 구체적으로 어느 정도 시간이 넘으면 메모이제이션이 필요한지 알려주어서 좋아요.
+6. > Chrome에서는 CPU 스로틀링 옵션을 제공합니다.
+   - 이런 옵션이 있다니! 네트워크 옵션만 알고 있었는데 크롬 개발자 도구를 좀 더 알아가야 겠네요.
+7. > useMemo는 첫 번째 렌더링을 더 빠르게 만들지 않습니다. 업데이트 시 불필요한 작업을 건너뛰는 데만 도움이 됩니다.
+   - useMemo의 기능 핵심 요약!
+8. >
+   ```javascript
+   // Better: Adjust the state while rendering
+   // 더 나음: 렌더링 중에 state 조정
+   const [prevItems, setPrevItems] = useState(items);
+   if (items !== prevItems) {
+     setPrevItems(items);
+     setSelection(null);
+   }
+   ```
+   - 위에 있는 것보다 읽기 더 불편한 코드라고 생각했는데 성능 면에서는 이게 낫다는거군요🤔
+9. > 이 패턴은 Effect보다 효율적이지만, 대부분의 컴포넌트에는 필요하지 않습니다. 어떻게 하든 props나 다른 state들을 바탕으로 state를 조정하면 데이터 흐름을 이해하고 디버깅하기 어려워질 것입니다. 항상 key로 모든 state를 재설정하거나 렌더링 중에 모두 계산할 수 있는지를 확인하세요. 예를 들어, 선택한 item을 저장(및 재설정)하는 대신, 선택한 item의 ID를 저장할 수 있습니다:
+
+   - 1. 데이터에 id 역할을 할 수 있는 값를 만들고, 해당 값의 변경을 이용해 초기화
+   - 2. 렌더링 중 state 조정
+   - 3. 불필요한 상황에 Effect 사용 … 순으로 better practice라는 거군요. 리마인드 목적으로 어노테이션 달아둡니다.
+   - [useId](https://react.dev/reference/react/useId#useid) 라는 훅도 있네요 (다만 논의 내용을 복기하며 레퍼런스 문서를 조금 더 읽어보니 dom 요소의 id 속성에 사용하면 좋을 것 같아요. [list의 key 값으로는 사용하지 말라](https://react.dev/reference/react/useId#caveats)고 하네용)
+
+10. > 일반적으로 React는 같은 컴포넌트가 같은 위치에서 렌더링될 때 state를 유지합니다. userId를 key로 Profile 컴포넌트에 전달하는 것은 곧, userId가 다른 두 Profile 컴포넌트를 state를 공유하지 않는 별개의 컴포넌트들로 취급하도록 React에게 요청하는 것입니다. React는 (userId로 설정한) key가 변경될 때마다 DOM을 다시 생성하고 state를 재설정하며, Profile 컴포넌트 및 모든 자식들의 state를 재설정할 것입니다.
+    - key를 활용하는건 이전 챕터에서도 나왔던 내용이지만 이 부분에서 설명을 깔끔하게 잘 해줘서 표시해봤습니다!
+11. > When you update a component during rendering, React throws away the returned JSX and immediately retries rendering. To avoid very slow cascading retries, React only lets you update the same component’s state during a render.
+
+    - 지난 번에 ref 예시를 작성하면서 왜 렌더링이 두 번 일어나지 않는지 설명을 할 수 없었는데 렌더링 중 업데이트가 일어나면 마지막 상태에 대한 렌더링만 커밋되는 거였군요!
+
+12. > 어떤 코드가 Effect에 있어야 하는지 이벤트 핸들러에 있어야 하는지 확실하지 않은 경우 이 코드가 실행되어야 하는 이유를 자문해 보세요. 컴포넌트가 사용자에게 표시되었기 때문에 실행되어야 하는 코드에만 Effect를 사용하세요.
+    - 이 안티패턴을 사용한 코드가 있는데, 리팩토링 방법을 계속 고민중입니다. 오늘 시도해봐야겠네요..
+13. > if (typeof window !== 'undefined') ...
+    - 이런 코드를 100vh 문제 때문에 구글링하며 본 적이 있었어요! 그 땐 꼼수인가 싶었는데 공식문서에서도 나오네요😲
+    - 100 vh를 모바일 / 웹 환경에 다르게 적용할 때 사용할 수 있는 css 속성이 있다고 합니다. `dvh`
+    - https://css-tricks.com/the-large-small-and-dynamic-viewports/
+14. > 자식 컴포넌트가 Effect에서 부모 컴포넌트의 state를 업데이트하면, 데이터 흐름을 추적하기가 매우 어려워집니다. 자식과 부모 컴포넌트 모두 동일한 데이터가 필요하므로, 대신 부모 컴포넌트가 해당 데이터를 페치해서 자식에게 전달하도록 하세요:
+    - 리액트가 단방향 데이터 흐름으로 디자인된 이유가 이것 같기도 하네요.. 중요한 포인트라는 생각이 듭니다.
+15. > 이를 위해 Effect를 사용하는 것이 일반적이지만, React에는 외부 저장소를 구독하기 위해 특별히 제작된 훅이 있습니다. Effect를 삭제하고 useSyncExternalStore호출로 대체하세요:
+    - 새로운 hook useSyncExternalStore
+    - nextjs에서 라우터의 이벤트를 구독하는 부분이 있는데 이 경우에 `useSyncExternalStore`를 사용할 수 있을지 살펴봐야겠어요
+      ```javascript
+      useEffect(() => {
+        router.events.on("routeChangeStart", handleRouterLoadingStart);
+        router.events.on("routeChangeComplete", handleRouterLoadingComplete);
+        router.events.on("routeChangeError", handleRouterLoadingComplete);
+        return () => {
+          router.events.off("routeChangeStart", handleRouterLoadingStart);
+          router.events.off("routeChangeComplete", handleRouterLoadingComplete);
+          router.events.off("routeChangeError", handleRouterLoadingComplete);
+        };
+      }, [router]);
+      ```
+16. > React에는 외부 저장소를 구독하기 위해 특별히 제작된 훅이 있습니다. Effect를 삭제하고 useSyncExternalStore호출로 대체하세요
+    - 이 훅도 처음 보는데 [링크](https://react-ko.dev/reference/react/useSyncExternalStore) 들어가서 보니까 이제보니 레퍼런스도 굉장히 상세하네요. 사용법이랑 트러블슈팅이 있어서 유용해보여요!
+
+## Lifecycle of Reactive Effects
+
+1. > Previously, you were thinking from the component’s perspective. When you looked from the component’s perspective, it was tempting to think of Effects as “callbacks” or “lifecycle events” that fire at a specific time like “after a render” or “before unmount”. This way of thinking gets complicated very fast, so it’s best to avoid.
+   - 계속 이렇게 이해하고 있었는데 이렇게 바라보면 안 된다니. 그런데 아직 시작/중지 방식으로 바라보는 게 어떤 이점이 있는지 와닿지 않아요 😅
+2. > 컴포넌트를 마운트, 업데이트 또는 마운트 해제하는 것은 중요하지 않습니다.
+   - useEffect를 componentDidMount 같은 생명주기 함수들의 대체제로 생각하곤 했는데.. 거기에서 빠져나와야겠네요
+3. > This might remind you how you don’t think whether a component is mounting or updating when you write the rendering logic that creates JSX. You describe what should be on the screen, and React figures out the rest.
+   - 앗 이 문장을 보니까 컴포넌트 라이프사이클에 신경쓰지 말라는 말이 좀 이해가 됩니다.
+4. > You already have an Effect that depends on roomId, so you might feel tempted to add the analytics call there:
+   - 생각없이 이렇게 한 경우가 많았던 것 같은데 반성합니다.
+5. > 반면 일관된 로직을 별도의 Effect로 분리하면 코드가 “더 깔끔해” 보일 수 있지만 유지 관리가 더 어려워집니다. 따라서 코드가 더 깔끔해 보이는지 여부가 아니라 프로세스가 동일한지 또는 분리되어 있는지를 고려해야 합니다.
+   - 리팩토링 포인트
+6. > Props, state, and other values declared inside the component are reactive because they’re calculated during rendering and participate in the React data flow.
+   - 1\) 렌더링 중에 계산되고 2\) React의 데이터 흐름에 참여하는 것을 반응형이라고 하는군요
+7. > 하지만 Effect의 관점에서 생각하면 마운트 및 마운트 해제에 대해 전혀 생각할 필요가 없습니다. 중요한 것은 Effect가 동기화를 시작하고 중지하는 작업을 지정한 것입니다.
+   - 이번 챕터는 사고방식 자체를 가이드 해주는 목적이네요🤔
+8. > Can global or mutable values be dependencies?
+   - 의존성이 될 수 없는 값과 그 이유를 명확하게 알려주어서 좋아요.
+9. > 버그를 수정하려면 린터의 제안에 따라 Effect의 의존성 요소로 roomId 및 serverUrl을 지정하세요:
+   - 어제 토스 Next 챌린지를 봤는데, 토스에서도 이 deps 관련 린트 rule을 error로 설정해두었더라고요. 역시 해당 옵션 자체에 문제가 있는 게 아니라 effect를 오용하고 있는 내 코드가 문제였구나.. 라는 생각을 했습니다.
+10. > 의존성을 “선택”할 수는 없습니다. 의존성에는 Effect에서 읽은 모든 반응형 값이 포함되어야 합니다. 린터가 이를 강제합니다. 때때로 이로 인해 무한 루프와 같은 문제가 발생하거나 Effect가 너무 자주 다시 동기화될 수 있습니다. 린터를 억제하여 이러한 문제를 해결하지 마세요!
+    - 린터를 억제하여 의존성 관련 문제를 해결하려 하지 말 것!
+
+## Separating Events from Effects
+
+1. > 이와 같은 반응형 값은 리렌더링으로 인해 변경될 수 있습니다. 예를 들어, 사용자가 message를 수정하거나 드롭다운에서 다른 roomId를 선택할 수 있습니다. 이벤트 핸들러와 Effect는 변경 사항에 다르게 반응합니다:
+   - 반응형 값의 정의 내지 부연설명
+2. > You can think of Effect Events as being very similar to event handlers. The main difference is that event handlers run in response to a user interactions, whereas Effect Events are triggered by you from Effects. Effect Events let you “break the chain” between the reactivity of Effects and code that should not be reactive.
+   - 아직 잘 이해가 안 되는데 여러번 읽어봐야겠어요.
+3. > 이 비반응형 로직을 Effect에서 추출하려면 useEffectEvent라는 특수 Hook을 사용합니다:
+
+   - 유용해보이는 훅인데 아직 Experimental이라 아쉽습니다.. 🥲
+   - 공감합니다!
+   - 그쵸.. 만약 useEffectEvent 없이 이 예제에서 나온 문제를 해결하려면 ref를 활용해야할것 같네요!
+   - (숙제 제출합니다...( ͡° ͜ʖ ͡°) )
+
+     ```javascript
+     function ChatRoom({ roomId, theme }) {
+       const themeRef = useRef(theme); // 이래도 되는걸까? 이 부분이 조금 마음에 걸려요..
+
+       useEffect(() => {
+         const connection = createConnection(serverUrl, roomId);
+         connection.on("connected", () => {
+           showNotification("Connected!", themeRef.current);
+         });
+         connection.connect();
+         return () => connection.disconnect();
+       }, [roomId]);
+
+       useEffect(() => {
+         themeRef.current = theme;
+       }, [theme]);
+
+       return <h1>Welcome to the {roomId} room!</h1>;
+     }
+     ```
+
+4. > Effect Event로 최근 props와 state 읽기
+   - experimental이지만 이렇게 정성들여 설명하는 것을 보면 곧 stable로 올라올 것 같기도 하고.. 존버해야겠네요
+5. > useEffectEvent가 React의 안정적인 기능이 되면 린터를 절대로 억제하지 않을 것을 추천합니다.
+   - 하지만 아직은 어쩔 수 없는 경우가 있을 수 있다는 뜻이군요…
+6. > You can think of Effect Events as being very similar to event handlers. The main difference is that event handlers run in response to a user interactions, whereas Effect Events are triggered by you from Effects. Effect Events let you “break the chain” between the reactivity of Effects and code that should not be reactive.
+   - 아직 잘 이해가 안 되는데 여러번 읽어봐야겠어요.
+   - (추가) ko.react.dev에서는 이렇게 번역되어 있네요. `Effect Event가 이벤트 핸들러와 아주 비슷하다고 생각할 수 있습니다. 이벤트 핸들러는 사용자의 상호작용에 대한 응답으로 실행되는 반면에 Effect Event는 Effect에서 직접 트리거 된다는 것이 주요한 차이점입니다. Effect Event를 사용하면 Effect의 반응성과 반응형이어서는 안 되는 코드 사이의 “연결을 끊어줍니다”.`
+7. > By passing url as an argument to your Effect Event, you are saying that visiting a page with a different url constitutes a separate “event” from the user’s perspective.
+   - 이벤트라는 단어의 의미를 새삼 다시 생각해볼 수 있었습니다. 어떤 순간에 발생하는 사건이라는 점에서
+8. > useEffectEvent를 사용하면 Linter에 “거짓말”을 할 필요가 없으며 코드가 예상대로 작동합니다:
+
+   - Q. 린터 따라가다 보면 아래와 같은 방식으로도 동작을 하긴 하는데 이 방식은 대안일까요? 아니면 꼼수일까요?
+   - (추가) 밑에 글 읽다보니까 한 번만 Effect가 실행되길 원하는 건데 이 방법을 따랐을 때 canMove가 바뀔 때마다 실행되서 바라는 결과가 아닌 것 같습니다.
+
+     ```javascript
+     const handleMove = useCallback(
+       (e) => {
+         if (canMove) {
+           setPosition({ x: e.clientX, y: e.clientY });
+         }
+       },
+       [canMove]
+     );
+
+     useEffect(() => {
+       window.addEventListener("pointermove", handleMove);
+       return () => window.removeEventListener("pointermove", handleMove);
+     }, [handleMove]);
+     ```
+
+9. > In the above sandbox, you didn’t want the Effect’s code to be reactive with regards to canMove. That’s why it made sense to extract an Effect Event.
+   - Q. canMove 상태와 상관없이 마운트한 시점에만 Effect가 한 번 실행되기는 바란다는 걸로 해석했는데 맞을까요?
+   - 그렇다고 생각해요! `위의 샌드박스에서는 Effect의 코드가 canMove에 반응하길 원하지 않았습니다. 그러므로 Effect Event로 추출하는 것이 합리적이었습니다.` -> ko.react.dev에서는 이렇게 해석되어 있는데 좀 더 수월하게 읽히는것 같아요
+10. > - Only call them from inside Effects.
+    > - Never pass them to other components or Hooks.
+
+    - Effect Event의 제약 사항
