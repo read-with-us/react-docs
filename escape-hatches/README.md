@@ -6,6 +6,8 @@
 - [You Might Not Need an Effect](#you-might-not-need-an-effect)
 - [Lifecycle of Reactive Effects](#lifecycle-of-reactive-effects)
 - [Separating Events from Effects](#separating-events-from-effects)
+- [Removing Effect Dependencies](#removing-effect-dependencies)
+- [Reusing Logic with Custom Hooks](#reusing-logic-with-custom-hooks)
 
 > **Note**
 >
@@ -89,7 +91,7 @@
     - (추가) 정확히 기억나지 않지만 약간 차이를 볼 수 있는 예시를 만들어보았습니다.
 
       ```jsx
-      import { useEffect, useRef, useState } from "react";
+      import { useEffect, useRef, useState } from 'react';
 
       export default function Form() {
         const inputRef = useRef(null);
@@ -100,7 +102,7 @@
             return;
           }
 
-          console.log("App inputWidth", inputWidth);
+          console.log('App inputWidth', inputWidth);
         }, [inputWidth]);
 
         return (
@@ -116,7 +118,7 @@
       - width: 옆의 숫자가 0에서 173으로 깜빡이지 않습니다.
 
       ```jsx
-      import { useEffect, useRef, useState } from "react";
+      import { useEffect, useRef, useState } from 'react';
 
       export default function Form() {
         const inputRef = useRef(null);
@@ -131,7 +133,7 @@
             return;
           }
 
-          console.log("App2 inputWidth", inputWidth);
+          console.log('App2 inputWidth', inputWidth);
         }, [inputWidth]);
 
         return (
@@ -319,13 +321,13 @@
     - nextjs에서 라우터의 이벤트를 구독하는 부분이 있는데 이 경우에 `useSyncExternalStore`를 사용할 수 있을지 살펴봐야겠어요
       ```javascript
       useEffect(() => {
-        router.events.on("routeChangeStart", handleRouterLoadingStart);
-        router.events.on("routeChangeComplete", handleRouterLoadingComplete);
-        router.events.on("routeChangeError", handleRouterLoadingComplete);
+        router.events.on('routeChangeStart', handleRouterLoadingStart);
+        router.events.on('routeChangeComplete', handleRouterLoadingComplete);
+        router.events.on('routeChangeError', handleRouterLoadingComplete);
         return () => {
-          router.events.off("routeChangeStart", handleRouterLoadingStart);
-          router.events.off("routeChangeComplete", handleRouterLoadingComplete);
-          router.events.off("routeChangeError", handleRouterLoadingComplete);
+          router.events.off('routeChangeStart', handleRouterLoadingStart);
+          router.events.off('routeChangeComplete', handleRouterLoadingComplete);
+          router.events.off('routeChangeError', handleRouterLoadingComplete);
         };
       }, [router]);
       ```
@@ -374,8 +376,8 @@
 
        useEffect(() => {
          const connection = createConnection(serverUrl, roomId);
-         connection.on("connected", () => {
-           showNotification("Connected!", themeRef.current);
+         connection.on('connected', () => {
+           showNotification('Connected!', themeRef.current);
          });
          connection.connect();
          return () => connection.disconnect();
@@ -414,8 +416,8 @@
      );
 
      useEffect(() => {
-       window.addEventListener("pointermove", handleMove);
-       return () => window.removeEventListener("pointermove", handleMove);
+       window.addEventListener('pointermove', handleMove);
+       return () => window.removeEventListener('pointermove', handleMove);
      }, [handleMove]);
      ```
 
@@ -426,3 +428,184 @@
     > - Never pass them to other components or Hooks.
 
     - Effect Event의 제약 사항
+
+## Removing Effect Dependencies
+
+1. > 의존성 목록은 Effect의 코드에서 사용하는 모든 반응형 값의 목록이라고 생각하면 됩니다. 이 목록에 무엇을 넣을지는 사용자가 선택하지 않습니다.
+
+- 여태 가지고 있던 관점을 바꾸는 말이라 재밌네요! 이전까지는 의존성 목록의 구성은 선택할 수 있는 것이라고 생각했어요.
+
+2. > 의존성 린트 오류는 컴파일 오류로 처리하는 것이 좋습니다. 이를 억제하지 않으면 이와 같은 버그가 발생하지 않습니다. 이 페이지의 나머지 부분에서는 이 경우와 다른 경우에 대한 대안을 설명합니다.
+
+- 회사 작업 시에는 솔직히 실천하기 어려울 것 같은데, 개인 프로젝트 작업 시에 이런 것들을 지키며 개발해봐야겠어요. 의존성 린트 오류 error로 설정하고 작업해보기 도전!
+  - 토스에서 진행한 코딩테스트에서 실제 토스 개발환경을 경험해볼 수 있었는데, 해당 환경에서도 의존성 린트 오류가 컴파일 오류로 처리되어 있었습니다. 이 설정이 best practice 라고 느껴지네요!
+
+3.  > - 다른 조건에서 Effect의 다른 부분을 다시 실행하고 싶을 수도 있습니다.
+    > - 일부 의존성의 변경에 “반응”하지 않고 “최신 값”만 읽고 싶을 수도 있습니다.
+    > - 의존성은 객체나 함수이기 때문에 의도치 않게 너무 자주 변경될 수 있습니다.
+
+- 의존성 배열이 바뀌어야 한다는 신호
+
+4. > 이 비반응 로직을 Effect 이벤트로 옮기면 됩니다: (useEffectEvent에 대한 설명글)
+
+- 끊임없이 useEffectEvent가 등장하니까 언제 나오나 궁금해져서 깃허브 이슈에 들어가서 살펴보다가 ‘It's an Event in the FRP terms, that is triggered from an Effect’ 이런 문장을 발견했습니다. 이펙트가 트리거하는 이벤트라고 하니까 갑자기 이름의 의미가 명확하게 이해가 되서 공유해봅니다! ([link](https://github.com/facebook/react/pull/25881#issue-1494806540))
+
+5. > 가능하면 객체와 함수를 Effect의 의존성으로 사용하지 않는 것이 좋습니다.
+
+- 저는 이런 개념이 없었는데 객체, 함수는 의존성으로 사용하지 않도록 조심해야겠네요!
+  - 그래도 state가 object인 경우는 setState로만 바뀌니까 괜찮을 것 같고 함수는 useCallback을 사용해서 필요한 state나 props를 의존성 배열에 넣으면 매 렌더링마다 영향을 주지는 않을 것 같아요.
+  - 저도 모르고 있었다가 최근에서야 회사 프로젝트 진행 하면서 effect안에 객체를 넣었다가 의도치 않게 과도하게 리렌더링 되어서 삽질을 했던 경험이 있었어요 흑흑 여기서 명확히 알고 가네요
+
+6. > 이제 options이 Effect 내부에서 선언되었으므로 더 이상 Effect의 의존성이 아닙니다. (반응형 값을 effect 코드 내부로 옮겨 의존성 배열을 정돈하는 방법 설명)
+
+- 컴포넌트 내부에서 선언된 값은 변할 수 있기 때문에 effect가 싱크를 맞춰야 하는지 아닌지 알려줘야 하는거고 (의존성에 추가해서) 반면 effect 내부에서 선언된건 그럴 필요 없는거네요 (어차피 effect가 항상 최신 값을 알테니까)
+
+7. > Effect 내에서 로직을 그룹화하기 위해 자신만의 함수를 작성할 수 있습니다. Effect 내부에서 선언하는 한, 반응형 값이 아니므로 Effect의 의존성이 될 필요가 없습니다.
+
+- 함수를 useEffect 내부에서 선언해서 사용한 적이 많은데 아마 밖에 선언하면 린트가 계속 의존성 배열에 넣으라고 해서 어느 순간 안 쪽에서 선언했던 게 시작인 것 같아요.
+  - 저는 useEffect에 의존성으로 함수를 넘겼다가 useCallback으로 감싸라는 린트 에러가 떠서 그렇게 따르다보니 구조가 복잡해진 경험이 많아요. 의존성 배열에 함수를 넘기는 건 최대한 지양해야 하는것이군요!
+
+8. > 이 문제를 해결하려면 Effect 외부의 객체에서 정보를 읽고 객체 및 함수 의존성을 피하십시오:
+   > const { roomId, serverUrl } = options;
+
+- 이런 방법이..👍
+- 원시값을 사용하는 것도 정말 좋은 방식입니다. 기억해둬야 겠어요.
+
+9. > 렌더링 중에 부모 컴포넌트가 객체를 생성한다는 점이 위험합니다.
+
+- 렌더링 중에 부모 컴포넌트가 객체를 생성한다는 게 무슨 뜻인지 잘 몰랐는데 코드를 보니까 굉장히 흔한 작성 방식이네요. 객체는 무조건 매 렌더링마다 바뀔 수 있다고 가정하는 게 안전할 것 같아요.
+
+## Reusing Logic with Custom Hooks
+
+1. > 가끔 조금 더 구체적인 목적을 가진 Hook이 존재하길 바랄 때도 있을 겁니다. 예를 들어, 데이터를 가져온다던가,
+
+- 이건 진짜 있었으면 좋겠네요
+  - 무수한 공감 & 문서 하단 deep dive 슬쩍 언급된 use가 이 기능을 제공하는 hook으로 개발되고 있는게 아닌가 싶어요!
+
+2. > `window.addEventListener('online', handleOnline)`
+
+- 이런 이벤트가 있다는 것 처음 알았네요.
+  - 저는 로그인 할 때 온라인 여부를 체크하면서 사용해봤어요!
+  - 이런 브라우저 이벤트도 그렇고, 요즘 기본적으로 제공해주는 것들이 많아서 라이브러리 없이도 많은 걸 만들 수 있는 것 같아요. 관련하여 최근 재밌게 본 웹 api 관련 글 공유합니다. ([link](https://ykss.netlify.app/translation/7_more_js_web_apis_to_build_futuristic_websites_you_didnt_know/?utm_source=substack&utm_medium=email))
+
+3. > Hook의 이름은 use 뒤에 대문자로 시작해야 합니다. 이런 규칙들은 컴포넌트를 볼 때, 어디에 state, Effect 및 다른 React 기능들이 “숨어” 있는지 알 수 있게 해줍니다.
+
+- 커스텀훅 만들 때 약간 관습적인건가.. 하고 이 규칙을 따라 만들고 있었는데 리액트에서 권장하고 있군요! 이유를 보니 납득..ㅎㅎ
+- 그냥 빌트인 훅의 이름이 use로 시작하니까 커스텀 훅도 그래야 한다고 생각했는데 이름만 봐도 내부에 상태나 다른 훅이 존재할 거라고 예상할 수 있다는 장점이 있네요.
+
+4. > 그럼, 컴포넌트는 조건에 따라 호출할 수 없게 됩니다. 이건 실제로 Hook을 내부에 추가해 호출할 때 매우 중요합니다. (훅을 호출하지 않으면 use를 접두어로 붙이는 것을 피하라는 내용)
+
+- 조건문이나 반복문 내에서 훅을 호출하지 않는 건 아주 중요한데 컨벤션을 지키면 이런 실수를 피할 수 있군요!
+
+5. > 커스텀 Hook 안의 코드는 컴포넌트가 재렌더링될 때마다 다시 돌아갈 겁니다.
+
+- 종종 간과하는 부분이라 리마인드가 필요해보이는 부분
+
+6. > `const onMessage = useEffectEvent(onReceiveMessage);`
+
+- 빨리 useEffectEvent가 stable로 올라왔으면.. 🙏
+
+7. > 예를 들어 두 가지 목록을 보여주는 ShippingForm 컴포넌트를 살펴봅시다. 하나는 도시의 목록을 보여주고, 다른 하나는 선택된 도시의 구역 목록을 보여줍니다. (state와 effect를 관련있는 것들끼리 모아둔 코드)
+
+- Q. 이건 문서랑 별개로 드는 궁금증인데 저희 회사에서는 보통 상태끼리, useEffect끼리 모아두는 편인데요. 다른 분들은 아래 코드 순서처럼 연관 있는 상태와 useEffect를 모아두는 방식에 대해 어떻게 생각하시나요? 혹은 회사에서 따르는 컨벤션이 있나요?
+- A. 저도 말씀하신 방식대로 사용하고 있어요. docs에 있는 코드를 보니 이런 식으로 정돈하는게 더 나아보이기도 하네요. 다만 내부가 복잡한 컴포넌트의 경우 같은 종류의 코드끼리 묶어두는게 더 편할 것 같긴 합니다! 하나의 상태가 여러 effect에서 사용될 수도 있을 것 같고, 상태 관련 코드가 곳곳에 있으면 불편하게 느껴질 것 같아요.
+
+8.
+
+```javascript
+function useData(url) {
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    if (url) {
+      let ignore = false;
+      fetch(url)
+        .then((response) => response.json())
+        .then((json) => {
+          if (!ignore) {
+            setData(json);
+          }
+        });
+      return () => {
+        ignore = true;
+      };
+    }
+  }, [url]);
+  return data;
+}
+```
+
+- 이 코드가 들어있는 useEffect 부분을 봐도 ignore가 항상 false 이지 않을지, 이게 어떻게 동작한다는건지 잘 그려지지 않았는데 아래처럼 되기 때문이지 않을까 싶네요..! 저는 이제야 이해가 좀 되는것 같습니다!
+
+  1. url이 바뀌거나 마운트 될 때 useEffect 실행
+  2. 데이터 페칭
+  3. then 에서 json 응답값을 파싱
+  4. ignore가 false 면 아직 컴포넌트가 마운트 되어 있고 url도 그대로이기 때문에 안심하고(?) data 업데이트
+  5. ignore가 true면 컴포넌트가 언마운트 되었거나 url이 바뀐 것이기 때문에 data 업데이트 하지 말고 스킵 (언마운트된 컴포넌트의 state를 업데이트 하거나 잘못된 url로부터 가져온 데이터로 data를 업데이트하는 불상사가 일어나지 않음)
+  6. 컴포넌트가 언마운트 되거나 url 이 변하면 return 다음의 함수 부분이 실행
+  7. ignore가 true를 할당받음
+  8. 만약 언마운트 된 후에 데이터 페칭이 완료 되었어도 ignore가 이미 true이기 때문에 data를 업데이트 하지 않음
+
+- 오! 공유해주셔서 감사합니다. 정확한 분석이라고 생각해요. 전에 useEffect로 데이터 페칭할 때 언마운트되었는데 데이터 상태가 업데이트되면서 memory leak 경고를 본 적이 있는데 당시에 이 해결 방법을 알았으면 좋았을 것 같아요.
+
+9. > 커스텀 Hook의 이름을 고르는 것부터 시작해 봅시다. 만약 명확한 이름을 고르기 위해 고군분투한다면, 그건 아마 사용하는 Effect가 컴포넌트 로직의 일부분에 너무 결합하여 있다는 의미일 겁니다. 그리고 아직 분리될 준비가 안 됐다는 뜻입니다.
+
+- 리팩터링 책에서 첫 번째로 소개하는 악취가 '기이한 이름'인데 ㅎㅎ 이름 짓기의 중요성을 다시 한 번 생각하게 되었습니다!
+
+10. > 커스텀 Hook이 구체적인 고급 사용 사례에 집중할 수 있도록 하세요. useEffect API 그 자체를 위한 대책이나 편리하게 감싸는 용도로 동작하는 커스텀 “생명 주기” Hook을 생성하거나 사용하는 것을 피하세요.
+
+- 토스에서는 useDidUpdate 같은 훅도 있었는데 😅 공식문서의 가이드를 따를 것인가 실무자들의 판단을 따를 것인가
+
+11. > useMount과 같은 커스텀 “생명 주기” Hook은 전형적인 React와 맞지 않습니다. 예를 들어 이 코드 예시는 문제가 있지만(roomId나 serverUrl의 변화에 반응하지 않음.), 린터는 오직 직접적인 useEffect 호출만 체크하기 때문에 경고하지 않습니다. 린터는 Hook에 대해 모르고 있습니다.
+
+- 엄청 많이 사용하는 커스텀 훅이라 뜨끔하네요.. 생명주기 hook을 사용하지 말라는 이유가, 반응형 데이터에 대한 의존성 참조 여부를 체크하지 못하도록 빠져나가는 일종의 편법이라서 그런 것 같은데, docs가 왜 이렇게 이야기하는지 그 이유는 알 것 같습니다. 🤔 하지만 일하다보면 필요해지는걸..?? 고민이 많이 되네요.
+
+12. > 커스텀 Hook API가 사용 사례를 제한하지 않고 너무 추상적이라면, 장기적으로는 그것이 해결할 수 있는 것보다 더 많은 문제를 만들 가능성이 높습니다.
+
+- 적절한 추상화는 정말 어려운 주제에요
+  - 추상화를 언제 할 것인가에 대한 감 잡기가 힘든 것 같아요. 너무 빨라도 안되고 늦어도 안되는...
+
+13. > “React에서 벗어나”는 것이 필요할 때나 사용 시에 괜찮은 내장된 해결 방법이 없는 경우, 사용합니다. React 팀의 목표는 더 구체적인 문제에 더 구체적인 해결 방법을 제공해 앱에 있는 Effect의 숫자를 점차 최소한으로 줄이는 것입니다. 커스텀 Hook으로 Effect를 감싸는 것은 이런 해결 방법들이 가능해질 때 코드를 쉽게 업그레이드할 수 있게 해줍니다.
+
+- 이걸 보니 정말 무분별하게 사용하지 말아야 겠다는 경각심이 생기네유 ㅎㅎ
+- 리액트를 사용해 개발 할 때 useEffect를 최대한 줄이는 것이 클린 코드의 기준 중 하나라고만 생각했는데, 리액트 팀 자체의 목표도 같은 방향성을 가지고 있군요!
+
+14. > 운 좋게도 React 18은 이런 모든 문제를 신경 써주는 useSyncExternalStore라고 불리는 섬세한 API를 포함합니다. 여기 새 API의 장점을 가지고 다시 쓰인 useOnlineStatus이 있습니다.
+
+- 이 api는 써본 경험이 없는데.. 한번 찾아봐야겠군요!
+- 지난주에 이 훅을 이용해 next router 상태를 구독하도록 하는 작업을 시도했다가 실패했는데, 그 외의 경우에도 분명 적용할 방법이 있을 것 같습니다. 요 훅도 따로 공부해보고 코드에도 적용해봐야겠어요!!
+
+15. 어떻게 이 변경을 하기 위해 "다른 컴포넌트들을 변경하지 않아도 되는지" 알아봅시다.
+
+- 로직을 분리하는 것의 가장 큰 장점인것 같아요
+
+16. > 커스텀 Hook으로 Effect를 감싸는 것이 종종 유용한 이유는 다음과 같습니다.
+
+매우 명확하게 Effect로 주고받는 데이터 흐름을 만들 때
+컴포넌트가 Effect의 정확한 실행보다 목적에 집중하도록 할 때
+React가 새 기능을 추가할 때, 다른 컴포넌트의 변경 없이 이 Effect를 삭제할 수 있을 때
+
+- 이 경우가 아니라면, 커스텀 훅으로 useEffect를 감싸는 것은 최대한 자제할 것!
+
+17. > `import { use } from 'react'; // 아직 사용 불가능합니다!`
+
+- 오.. 이렇게 써두니 뭔지 더 궁금해지네요 빨리 experimental으로라도 올라왔으면.
+- 오! 다른 라이브러리에서 제공하는 캐싱 등 차별화된 기능까지 포함되는 건지 궁금합니다.
+- 위에 데이터 가져오는 훅 말씀을 하셨는데 뭔가 리액트에서도 작업중인가보네요..!
+
+18. > Effect 사용을 즐긴다면 그렇게 사용해도 됩니다.
+
+- 요 문장에서 가시가 느껴지는데 저만 그런가요.. ㅋㅋㅋ
+
+19. > Effect 내부의 로직을 유지하는 대신, 대부분의 중요한 로직을 자바스크립트의 Class 내부로 이동시킬 수 있습니다.
+
+- 이 문서에서 클래스가 처음으로 등장한 것 같은데 함수보다 클래스를 사용하는 것이 더 적합한지 판단하는 기준을 잘 모르겠어요.
+- Q. 리액트에서 클래스를 사용해 로직을 관리하신 경험이 있는 분? 있다면 왜 클래스로 작성하셨나요?
+  - A. 이전에 웹소켓에서 상태를 받아왔을 때, 하나의 instance를 생성해 모든 곳에서 사용하게 하려고 클래스를 사용한 적 있었어요. 지금 생각해보면 context api를 이용해서 대체할 수 있지 않을까 싶네요..!
+
+20. > 예를 들어 여러 애니메이션을 연결하는 것처럼 Effects 간의 조정이 더 많이 필요할수록, 위의 코드 예시처럼 Effect와 Hook 밖으로 로직을 완전히 분리하는 것이 합리적입니다. 그렇게 분리한 코드는 “외부 시스템”이 될 것입니다
+
+- 분리한 코드를 외부 시스템으로 바라보는 관점이 인상적입니다!
+
+21. > 하지만 이런 특정 페이드인 애니메이션은 일반 CSS 애니메이션으로 구현하는 것이 더 간단하고 훨씬 효율적입니다.
+
+- 자바스크립트 코드 열심히 읽다가 이걸 보니 약간 허무하지만 맞는 말이네요 ㅋㅋ
